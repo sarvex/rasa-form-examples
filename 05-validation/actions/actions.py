@@ -20,11 +20,12 @@ class ValidateNameForm(FormValidationAction):
 
         # If the name is super short, it might be wrong.
         print(f"First name given = {slot_value} length = {len(slot_value)}")
-        if len(slot_value) <= 2:
-            dispatcher.utter_message(text=f"That's a very short name. I'm assuming you mis-spelled.")
-            return {"first_name": None}
-        else:
+        if len(slot_value) > 2:
             return {"first_name": slot_value}
+        dispatcher.utter_message(
+            text="That's a very short name. I'm assuming you mis-spelled."
+        )
+        return {"first_name": None}
 
     def validate_last_name(
         self,
@@ -37,8 +38,9 @@ class ValidateNameForm(FormValidationAction):
 
         # If the name is super short, it might be wrong.
         print(f"Last name given = {slot_value} length = {len(slot_value)}")
-        if len(slot_value) <= 2:
-            dispatcher.utter_message(text=f"That's a very short name. I'm assuming you mis-spelled.")
-            return {"last_name": None}
-        else:
+        if len(slot_value) > 2:
             return {"last_name": slot_value}
+        dispatcher.utter_message(
+            text="That's a very short name. I'm assuming you mis-spelled."
+        )
+        return {"last_name": None}

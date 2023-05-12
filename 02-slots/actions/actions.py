@@ -28,9 +28,8 @@ class ActionSayName(Action):
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
 
-        name = tracker.get_slot("name")
-        if not name:
-            dispatcher.utter_message(text="I don't know your name.")
-        else:
+        if name := tracker.get_slot("name"):
             dispatcher.utter_message(text=f"Your name is {name}!")
+        else:
+            dispatcher.utter_message(text="I don't know your name.")
         return []

@@ -21,9 +21,8 @@ class ValidateNameForm(FormValidationAction):
         domain: "DomainDict",
     ) -> Optional[List[Text]]:
         first_name = tracker.slots.get("first_name")
-        if first_name is not None:
-            if first_name not in names:
-                return ["name_spelled_correctly"] + slots_mapped_in_domain
+        if first_name is not None and first_name not in names:
+            return ["name_spelled_correctly"] + slots_mapped_in_domain
         return slots_mapped_in_domain
     
     async def extract_name_spelled_correctly(
@@ -55,11 +54,12 @@ class ValidateNameForm(FormValidationAction):
 
         # If the name is super short, it might be wrong.
         print(f"First name given = {slot_value} length = {len(slot_value)}")
-        if len(slot_value) <= 1:
-            dispatcher.utter_message(text=f"That's a very short name. I'm assuming you mis-spelled.")
-            return {"first_name": None}
-        else:
+        if len(slot_value) > 1:
             return {"first_name": slot_value}
+        dispatcher.utter_message(
+            text="That's a very short name. I'm assuming you mis-spelled."
+        )
+        return {"first_name": None}
 
     def validate_last_name(
         self,
@@ -72,8 +72,9 @@ class ValidateNameForm(FormValidationAction):
 
         # If the name is super short, it might be wrong.
         print(f"Last name given = {slot_value} length = {len(slot_value)}")
-        if len(slot_value) <= 1:
-            dispatcher.utter_message(text=f"That's a very short name. I'm assuming you mis-spelled.")
-            return {"last_name": None}
-        else:
+        if len(slot_value) > 1:
             return {"last_name": slot_value}
+        dispatcher.utter_message(
+            text="That's a very short name. I'm assuming you mis-spelled."
+        )
+        return {"last_name": None}
